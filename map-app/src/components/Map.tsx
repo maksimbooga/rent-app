@@ -17,7 +17,6 @@ const Map = () => {
   const map = useRef<maplibregl.Map | null>(null);
   const [selectedBuilding, setSelectedBuilding] = useState<string | null>(null);
 
-  // Пример данных зданий (полигоны)
   const buildings: Building[] = [
     {
       id: 'building-1',
@@ -91,14 +90,13 @@ const Map = () => {
           }
         ]
       },
-      center: [37.6173, 55.7558], // Москва
+      center: [37.6173, 55.7558],
       zoom: 16
     });
 
     map.current.on('load', () => {
       if (!map.current) return;
 
-      // Добавляем источник данных для зданий
       map.current.addSource('buildings', {
         type: 'geojson',
         data: {
@@ -119,7 +117,6 @@ const Map = () => {
         }
       });
 
-      // Добавляем слой для отображения зданий
       map.current.addLayer({
         id: 'buildings-fill',
         type: 'fill',
@@ -136,7 +133,6 @@ const Map = () => {
         }
       });
 
-      // Добавляем слой для границ зданий
       map.current.addLayer({
         id: 'buildings-border',
         type: 'line',
@@ -147,7 +143,6 @@ const Map = () => {
         }
       });
 
-      // Добавляем слой для подсветки выбранного здания
       map.current.addLayer({
         id: 'buildings-highlight',
         type: 'fill',
@@ -159,20 +154,17 @@ const Map = () => {
         filter: ['==', ['get', 'id'], '']
       });
 
-      // Обработчик клика по зданию
       map.current.on('click', 'buildings-fill', (e) => {
         if (e.features && e.features[0]) {
           const buildingId = e.features[0].id as string;
           setSelectedBuilding(buildingId);
-          
-          // Обновляем фильтр для подсветки
+
           if (map.current) {
             map.current.setFilter('buildings-highlight', ['==', ['get', 'id'], buildingId]);
           }
         }
       });
 
-      // Изменение курсора при наведении на здание
       map.current.on('mouseenter', 'buildings-fill', () => {
         if (map.current) {
           map.current.getCanvas().style.cursor = 'pointer';
@@ -205,14 +197,13 @@ const Map = () => {
   return (
     <div className="relative w-full h-screen">
       <div ref={mapContainer} className="w-full h-full" />
-      
-      {/* Панель информации */}
+
       <div className="absolute top-4 left-4 bg-white rounded-lg shadow-lg p-4 max-w-sm">
         <h2 className="text-lg font-bold mb-2">Интерактивная карта зданий</h2>
         <p className="text-sm text-gray-600 mb-4">
           Кликните на здание на карте для получения информации
         </p>
-        
+
         {selectedBuildingData ? (
           <div className="bg-blue-50 p-3 rounded">
             <h3 className="font-semibold text-blue-900">{selectedBuildingData.name}</h3>
@@ -228,18 +219,6 @@ const Map = () => {
         ) : (
           <p className="text-sm text-gray-500">Выберите здание на карте</p>
         )}
-      </div>
-
-      {/* Панель с трудностями работы с полигонами */}
-      <div className="absolute top-4 right-4 bg-white rounded-lg shadow-lg p-4 max-w-md">
-        <h3 className="text-lg font-bold mb-2 text-red-600">Трудности работы с полигонами:</h3>
-        <ul className="text-sm text-gray-700 space-y-1">
-          <li>• Сложность определения клика внутри полигона</li>
-          <li>• Проблемы с производительностью при большом количестве полигонов</li>
-          <li>• Трудности с отображением сложных многоугольников</li>
-          <li>• Проблемы с z-index и перекрытием слоев</li>
-          <li>• Сложность обработки полигонов с отверстиями</li>
-        </ul>
       </div>
     </div>
   );
