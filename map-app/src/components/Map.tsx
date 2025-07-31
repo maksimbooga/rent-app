@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -12,7 +12,7 @@ interface Building {
   };
 }
 
-const Map: React.FC = () => {
+const Map = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
   const [selectedBuilding, setSelectedBuilding] = useState<string | null>(null);
@@ -67,7 +67,7 @@ const Map: React.FC = () => {
   ];
 
   useEffect(() => {
-    if (map.current) return; // Инициализируем карту только один раз
+    if (map.current) return;
 
     map.current = new maplibregl.Map({
       container: mapContainer.current!,

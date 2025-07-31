@@ -1,94 +1,69 @@
-# Интерактивная карта с MapLibre GL JS
+# React + TypeScript + Vite
 
-Это React приложение демонстрирует работу с картами и полигонами зданий с использованием MapLibre GL JS и Tailwind CSS.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Возможности
+Currently, two official plugins are available:
 
-- **Интерактивная карта зданий**: Кликните на здание для получения информации
-- **Подсветка выбранного полигона**: Выбранное здание подсвечивается красным цветом
-- **Демонстрация проблем с полигонами**: Отдельный режим для показа трудностей работы с полигонами
-- **Современный UI**: Красивый интерфейс с использованием Tailwind CSS
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Трудности работы с полигонами
+## Expanding the ESLint configuration
 
-### 1. Сложность определения клика внутри полигона
-- Проблемы с точным определением точки клика внутри сложных полигонов
-- Трудности с обработкой полигонов с отверстиями
-- Проблемы с производительностью при большом количестве полигонов
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-### 2. Проблемы с производительностью
-- Медленная отрисовка при большом количестве полигонов
-- Проблемы с памятью при работе с сложными геометриями
-- Трудности с оптимизацией рендеринга
+```js
+export default tseslint.config([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
 
-### 3. Сложности с отображением
-- Проблемы с z-index и перекрытием слоев
-- Трудности с отображением сложных многоугольников
-- Проблемы с самопересекающимися полигонами
+      // Remove tseslint.configs.recommended and replace with this
+      ...tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      ...tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      ...tseslint.configs.stylisticTypeChecked,
 
-### 4. Проблемы с данными
-- Сложность обработки полигонов с отверстиями
-- Трудности с валидацией геометрии
-- Проблемы с импортом данных из различных источников
-
-## Установка и запуск
-
-```bash
-# Установка зависимостей
-npm install
-
-# Запуск в режиме разработки
-npm start
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
 
-## Технологии
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-- **React 18** с TypeScript
-- **MapLibre GL JS** для работы с картами
-- **Tailwind CSS** для стилизации
-- **OpenStreetMap** как источник тайлов карты
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-## Структура проекта
-
+export default tseslint.config([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
-src/
-├── components/
-│   ├── Map.tsx              # Основной компонент карты
-│   ├── PolygonIssues.tsx    # Демонстрация проблем с полигонами
-│   └── MapSwitcher.tsx      # Переключатель между режимами
-├── App.tsx                  # Главный компонент
-└── index.css               # Стили Tailwind CSS
-```
-
-## Использование
-
-1. Запустите приложение командой `npm start`
-2. Откроется браузер с интерактивной картой
-3. Кликните на здание для получения информации
-4. Используйте переключатель вверху для перехода к демонстрации проблем
-
-## Источники данных
-
-В данном примере используются синтетические данные зданий в формате GeoJSON. В реальном проекте можно подключить:
-
-- OpenStreetMap API
-- Геосервисы (Google Maps, Yandex Maps)
-- Собственные API с данными о зданиях
-- Базы данных с геометрией зданий
-
-## Решения проблем с полигонами
-
-### 1. Оптимизация производительности
-- Использование кластеризации для больших наборов данных
-- Применение пространственных индексов
-- Оптимизация геометрии полигонов
-
-### 2. Улучшение точности кликов
-- Использование буферизации для увеличения области клика
-- Применение алгоритмов point-in-polygon
-- Оптимизация обработчиков событий
-
-### 3. Работа со сложными полигонами
-- Валидация геометрии перед отображением
-- Использование специализированных библиотек (turf.js)
-- Применение алгоритмов упрощения полигонов

@@ -1,13 +1,11 @@
-import React from 'react';
-import MapSwitcher from './components/MapSwitcher';
-import './App.css';
+import Map from './components/Map'
 
 function App() {
   return (
-    <div className="App">
-      <MapSwitcher />
+    <div className="w-full h-screen">
+      <Map />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
